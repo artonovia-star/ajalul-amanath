@@ -1,0 +1,504 @@
+/* ==================== REMINDER OVERLAY ==================== */
+.reminder-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 10000;
+  animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ==================== REMINDER SHEET ==================== */
+.reminder-sheet {
+  width: 100%;
+  max-width: 580px;
+  max-height: 88vh;
+  background: linear-gradient(180deg, #0f2e35 0%, #0b2329 100%);
+  border-radius: 32px 32px 0 0;
+  padding: 20px 20px 28px;
+  box-shadow: 
+    0 -16px 64px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  animation: slideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ==================== HANDLE ==================== */
+.reminder-handle {
+  width: 48px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  margin: 0 auto 20px;
+}
+
+/* ==================== HEADER ==================== */
+.reminder-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+
+.reminder-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #eaf6f8;
+  margin: 0 0 6px 0;
+}
+
+.reminder-subtitle {
+  font-size: 13px;
+  color: rgba(234, 246, 248, 0.6);
+  margin: 0;
+}
+
+.clear-all-btn {
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  background: rgba(255, 107, 107, 0.1);
+  color: #ff6b6b;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.clear-all-btn:hover {
+  background: rgba(255, 107, 107, 0.2);
+  border-color: rgba(255, 107, 107, 0.5);
+  transform: translateY(-1px);
+}
+
+.clear-all-btn:active {
+  transform: scale(0.96);
+}
+
+/* ==================== CONTENT ==================== */
+.reminder-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+  margin-bottom: 20px;
+}
+
+.reminder-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.reminder-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.reminder-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+.reminder-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ==================== EMPTY STATE ==================== */
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  opacity: 0.7;
+}
+
+.empty-icon {
+  font-size: 72px;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: 20px;
+  font-weight: 600;
+  color: rgba(234, 246, 248, 0.8);
+  margin: 0 0 8px 0;
+}
+
+.empty-subtext {
+  font-size: 14px;
+  color: rgba(234, 246, 248, 0.5);
+  margin: 0;
+}
+
+/* ==================== SECTION ==================== */
+.reminder-section {
+  margin-bottom: 28px;
+}
+
+.reminder-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: rgba(234, 246, 248, 0.5);
+  margin: 0 0 16px 0;
+}
+
+/* ==================== REMINDER CARDS ==================== */
+.reminder-card {
+  position: relative;
+  padding: 20px;
+  border-radius: 24px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  backdrop-filter: blur(16px);
+  box-shadow: 
+    0 12px 32px rgba(0, 0, 0, 0.4),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  margin-bottom: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: cardSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reminder-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 16px 40px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.reminder-card:last-child {
+  margin-bottom: 0;
+}
+
+/* Border accent */
+.reminder-card.pending {
+  border-left: 4px solid #f5c16c;
+}
+
+.reminder-card.paid {
+  border-left: 4px solid #4ade80;
+  opacity: 0.7;
+}
+
+/* ==================== DELETE BUTTON ==================== */
+.delete-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 107, 107, 0.15);
+  color: #ff6b6b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  z-index: 10;
+}
+
+.delete-btn .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.delete-btn:hover {
+  background: rgba(255, 107, 107, 0.25);
+  transform: scale(1.1) rotate(90deg);
+}
+
+.delete-btn:active {
+  transform: scale(0.95) rotate(90deg);
+}
+
+/* ==================== CARD HEADER ==================== */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 12px;
+  padding-right: 32px; /* Space for delete button */
+}
+
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.status-badge.pending {
+  background: rgba(245, 193, 108, 0.2);
+  color: #f5c16c;
+  border: 1px solid rgba(245, 193, 108, 0.3);
+}
+
+.status-badge.paid {
+  background: rgba(74, 222, 128, 0.2);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.card-type {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(234, 246, 248, 0.7);
+  letter-spacing: 0.3px;
+}
+
+/* ==================== CARD AMOUNT ==================== */
+.card-amount {
+  margin-bottom: 16px;
+}
+
+.amount-label {
+  font-size: 12px;
+  color: rgba(234, 246, 248, 0.5);
+  margin: 0 0 6px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.amount-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #eaf6f8;
+  margin: 0;
+}
+
+/* ==================== CARD DETAILS ==================== */
+.card-details {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 13px;
+  gap: 12px;
+}
+
+.detail-label {
+  color: rgba(234, 246, 248, 0.6);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.detail-value {
+  color: rgba(234, 246, 248, 0.9);
+  font-weight: 600;
+  text-align: right;
+}
+
+/* ==================== CARD META ==================== */
+.card-meta {
+  margin-bottom: 16px;
+}
+
+.meta-label {
+  font-size: 12px;
+  color: rgba(234, 246, 248, 0.5);
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.meta-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(234, 246, 248, 0.9);
+  margin: 0;
+}
+
+/* ==================== MARK PAID BUTTON ==================== */
+.mark-paid-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 16px;
+  border: none;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  color: #0a0a0a;
+  background: linear-gradient(135deg, #f5c16c 0%, #ffd98a 100%);
+  box-shadow: 0 6px 20px rgba(245, 193, 108, 0.35);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.3px;
+}
+
+.mark-paid-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(245, 193, 108, 0.45);
+}
+
+.mark-paid-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ==================== CLOSE BUTTON ==================== */
+.close-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: 20px;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  color: #062c33;
+  background: linear-gradient(135deg, #2aa198 0%, #3ad5c4 100%);
+  box-shadow: 0 10px 28px rgba(42, 161, 152, 0.35);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.5px;
+}
+
+.close-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(42, 161, 152, 0.45);
+}
+
+.close-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ==================== PAID CARD ANIMATION ==================== */
+.reminder-card.paid {
+  animation: paidAnimation 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes paidAnimation {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 480px) {
+  .reminder-sheet {
+    max-height: 92vh;
+    border-radius: 28px 28px 0 0;
+    padding: 18px 16px 24px;
+  }
+
+  .reminder-title {
+    font-size: 22px;
+  }
+
+  .reminder-subtitle {
+    font-size: 12px;
+  }
+
+  .amount-value {
+    font-size: 24px;
+  }
+
+  .reminder-card {
+    padding: 18px;
+  }
+
+  .card-details {
+    padding: 12px 14px;
+  }
+}
+
+/* ==================== FOCUS STATES ==================== */
+.delete-btn:focus-visible,
+.mark-paid-btn:focus-visible,
+.close-btn:focus-visible,
+.clear-all-btn:focus-visible {
+  outline: 2px solid #2aa198;
+  outline-offset: 2px;
+}
+
+/* ==================== REDUCED MOTION ==================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==================== REMINDER SCREEN SYNC BADGES ==================== */
+.sync-badge {
+  color: #2ec4b6;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.local-badge {
+  color: rgba(234, 246, 248, 0.5);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.empty-hint {
+  margin-top: 16px;
+  padding: 12px 20px;
+  background: rgba(46, 196, 182, 0.1);
+  border: 1px solid rgba(46, 196, 182, 0.2);
+  border-radius: 12px;
+  font-size: 13px;
+  color: #2ec4b6;
+  text-align: center;
+}

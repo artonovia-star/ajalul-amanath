@@ -1,0 +1,420 @@
+@font-face {
+  font-family: "ZakathHeading";
+  src: url("./assets/fonts/centurygothic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "ZakathBody";
+  src: url("./assets/fonts/centurygothic_bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* PREMIUM VARIABLES */
+:root {
+  --primary-gradient: linear-gradient(135deg, #0a4d5c 0%, #0e2a36 100%);
+  --card-gradient: linear-gradient(135deg, #1a4f5f 0%, #143847 100%);
+  --accent-gradient: linear-gradient(135deg, #2ec4b6 0%, #1fa89c 100%);
+  --glow-color: rgba(46, 196, 182, 0.3);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+.calculator-screen {
+  min-height: 100vh;
+  background: var(--primary-gradient);
+  background-attachment: fixed;
+  color: #fff;
+  padding: 20px;
+  font-family: system-ui, -apple-system, sans-serif;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* AMBIENT BACKGROUND EFFECT */
+.calculator-screen::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(46, 196, 182, 0.08) 0%, transparent 70%);
+  animation: float 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -30px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+.back-btn {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  color: #7bdcff;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.back-btn:hover {
+  background: rgba(123, 220, 255, 0.1);
+  transform: translateX(-4px);
+}
+
+.title {
+  font-family: "ZakathBody", sans-serif;
+  letter-spacing: 1px;
+  font-size: clamp(28px, 5vw, 34px);
+  margin-bottom: 8px;
+  text-align: center;
+  margin-top: clamp(40px, 4vw, 50px);
+  background: linear-gradient(135deg, #fff 0%, #7bdcff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: titleGlow 3s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(123, 220, 255, 0.3)); }
+  50% { filter: drop-shadow(0 0 16px rgba(123, 220, 255, 0.5)); }
+}
+
+.subtitle {
+  font-family: "ZakathHeading", sans-serif;
+  font-size: 14px;
+  opacity: 0.7;
+  text-align: center;
+  margin-bottom: clamp(50px, 4vw, 60px);
+  letter-spacing: 0.5px;
+}
+
+/* PREMIUM CARD DESIGN */
+.calc-card {
+  background: var(--card-gradient);
+  border-radius: 40px;
+  padding: 24px 20px;
+  margin-bottom: 20px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 2px 8px rgba(255, 255, 255, 0.05) inset;
+  backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* CARD SHIMMER EFFECT */
+.calc-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.08),
+    transparent
+  );
+  transition: left 0.6s;
+}
+
+.calc-card:hover::before {
+  left: 100%;
+}
+
+.calc-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 16px 48px rgba(0, 0, 0, 0.4),
+    0 0 24px var(--glow-color),
+    0 2px 8px rgba(255, 255, 255, 0.08) inset;
+}
+
+.calc-card h3 {
+  font-family: "ZakathBody", sans-serif;
+  margin-bottom: clamp(18px, 3vw, 24px);
+  font-size: 22px;
+  text-align: center;
+  margin-top: clamp(4px, 2vw, 8px);
+  opacity: 0.4;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 16px;
+}
+
+/* PREMIUM INPUT STYLING */
+.input-group {
+  display: flex;
+  gap: 12px;
+  position: relative;
+}
+
+.input-group input {
+  flex: 1;
+  height: 52px;
+  border-radius: 24px;
+  border: 2px solid transparent;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0 18px;
+  font-size: 15px;
+  color: #fff;
+  outline: none;
+  min-width: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: "ZakathHeading", sans-serif;
+}
+
+.input-group input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.input-group input:focus {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #2ec4b6;
+  box-shadow: 0 0 0 4px rgba(46, 196, 182, 0.15);
+  transform: translateY(-2px);
+}
+
+/* PREMIUM TOGGLE */
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  font-size: 13px;
+  font-family: "ZakathHeading", sans-serif;
+  opacity: 0.9;
+}
+
+.toggle input[type="checkbox"] {
+  width: 48px;
+  height: 26px;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.toggle input[type="checkbox"]::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  top: 2px;
+  left: 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle input[type="checkbox"]:checked {
+  background: var(--accent-gradient);
+}
+
+.toggle input[type="checkbox"]:checked::before {
+  left: 24px;
+}
+
+/* PREMIUM RESULT BOX */
+.result-box {
+  background: linear-gradient(135deg, #0f5b6b 0%, #0a3f4a 100%);
+  border-radius: 32px;
+  padding: 28px 24px;
+  text-align: center;
+  margin-top: 24px;
+  border: 1px solid rgba(46, 196, 182, 0.2);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(46, 196, 182, 0.1) inset;
+  position: relative;
+  overflow: hidden;
+}
+
+.result-box::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(46, 196, 182, 0.1) 0%, transparent 70%);
+  animation: resultPulse 4s ease-in-out infinite;
+}
+
+@keyframes resultPulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+.result-box h2 {
+  margin: 8px 0;
+  font-size: 32px;
+  font-family: "ZakathBody", sans-serif;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.result-b {
+  font-size: 14px;
+  font-family: "ZakathHeading", sans-serif;
+  position: relative;
+  z-index: 1;
+  opacity: 0.9;
+}
+
+.due {
+  color: #2ec4b6;
+  font-weight: 700;
+  text-shadow: 0 0 12px rgba(46, 196, 182, 0.5);
+  letter-spacing: 0.5px;
+}
+
+.amount {
+  font-size: 20px;
+  margin-top: 6px;
+  font-family: "ZakathBody", sans-serif;
+  position: relative;
+  z-index: 1;
+}
+
+.not-due {
+  font-family: "ZakathHeading", sans-serif;
+  color: #ff6b6b;
+  font-size: 15px;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 0 12px rgba(255, 107, 107, 0.5);
+}
+
+/* PREMIUM BUTTON */
+.gold-back {
+  margin-bottom: 24px;
+  font-family: "ZakathHeading", sans-serif;
+  letter-spacing: 0.8px;
+  align-self: flex-start;
+  background: linear-gradient(135deg, #1c4657 0%, #143847 100%);
+  color: #fff;
+  border: 1px solid var(--glass-border);
+  padding: 12px 24px;
+  border-radius: 24px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.gold-back:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #1f5368 0%, #173d4d 100%);
+}
+
+.gold-back:active {
+  transform: translateY(0);
+}
+
+.nisab-note {
+  font-family: "ZakathHeading", sans-serif;
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+/* PREMIUM CTA BUTTON */
+.add-reminder-btn {
+  margin-top: 24px;
+  width: 100%;
+  padding: 16px 24px;
+  border-radius: 24px;
+  border: none;
+  background: var(--accent-gradient);
+  color: #022b2f;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 8px 24px rgba(46, 196, 182, 0.3),
+    0 2px 8px rgba(255, 255, 255, 0.2) inset;
+  position: relative;
+  overflow: hidden;
+  font-family: "ZakathBody", sans-serif;
+}
+
+.add-reminder-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.add-reminder-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.add-reminder-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 16px 40px rgba(46, 196, 182, 0.4),
+    0 2px 12px rgba(255, 255, 255, 0.3) inset;
+}
+
+.add-reminder-btn:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+/* RESPONSIVE ENHANCEMENTS */
+@media (max-width: 480px) {
+  .calculator-screen {
+    padding: 16px;
+  }
+  
+  .calc-card {
+    padding: 20px 16px;
+  }
+  
+  .result-box h2 {
+    font-size: 28px;
+  }
+}
+
+/* SMOOTH SCROLL */
+* {
+  scroll-behavior: smooth;
+}
+
+/* ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

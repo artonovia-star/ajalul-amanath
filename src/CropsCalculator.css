@@ -1,0 +1,138 @@
+/* ================= SCREEN ================= */
+.calculator-screen {
+  max-width: 420px;
+  margin: auto;
+  padding: 16px;
+  position: relative;
+}
+
+/* ================= INFO MODAL ================= */
+.info-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+}
+
+/* FORCE CENTER */
+.info-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background: #0e2a36;
+  color: #fff;
+  padding: 20px;
+  border-radius: 33px;
+
+  width: 90%;
+  max-width: 420px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+
+.info-modal h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 18px;
+  text-align: center;
+}
+
+.info-modal p {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.close-info {
+  width: 100%;
+  margin-top: 14px;
+  padding: 10px;
+  border: none;
+  border-radius: 15px;
+  background: #1fb6aa;
+  color: #002;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* ================= CARDS ================= */
+.calc-card {
+  background: #0f3240;
+  padding: 16px;
+  border-radius: 16px;
+  margin-bottom: 16px;
+}
+
+.calc-card h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+/* ================= INPUT ================= */
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  font-size: 15px;
+}
+
+.nisab-note {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* ================= RADIO ================= */
+.radio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.radio input {
+  accent-color: #1fb6aa;
+}
+
+.radio-note {
+  display: block;
+  margin-left: 24px;
+  margin-top: 4px;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* ================= RESULT ================= */
+.result-box {
+  background: #0b2530;
+  padding: 16px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.due {
+  color: #3ee6b5;
+  font-weight: bold;
+}
+
+.not-due {
+  opacity: 0.85;
+}
+
+.amount {
+  margin-top: 6px;
+  font-size: 16px;
+}
+

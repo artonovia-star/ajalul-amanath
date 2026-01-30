@@ -1,0 +1,461 @@
+/* ==================== NOTIFICATION CENTER OVERLAY ==================== */
+.notification-center-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ==================== NOTIFICATION CENTER PANEL ==================== */
+.notification-center-panel {
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  background: linear-gradient(180deg, #0f2e35 0%, #0b2329 100%);
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ==================== HEADER ==================== */
+.nc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nc-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #eaf6f8;
+  margin: 0 0 6px 0;
+  letter-spacing: 0.5px;
+}
+
+.nc-subtitle {
+  font-size: 14px;
+  color: rgba(234, 246, 248, 0.6);
+  margin: 0;
+}
+
+.nc-close-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 107, 107, 0.15);
+  color: #ff6b6b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.nc-close-btn:hover {
+  background: rgba(255, 107, 107, 0.25);
+  transform: scale(1.1);
+}
+
+.nc-close-btn .material-symbols-outlined {
+  font-size: 24px;
+}
+
+/* ==================== CONTENT ==================== */
+.nc-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.nc-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.nc-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nc-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+/* ==================== NOTIFICATION CARD ==================== */
+.nc-card {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nc-card:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+}
+
+.nc-card.active {
+  background: linear-gradient(
+    135deg,
+    rgba(46, 196, 182, 0.15) 0%,
+    rgba(31, 168, 156, 0.08) 100%
+  );
+  border-color: rgba(46, 196, 182, 0.3);
+}
+
+/* ==================== CARD HEADER ==================== */
+.nc-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nc-card-number {
+  font-size: 16px;
+  font-weight: 700;
+  color: #eaf6f8;
+  letter-spacing: 0.3px;
+}
+
+.nc-status-badge {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+
+.nc-status-badge.draft {
+  background: rgba(156, 163, 175, 0.2);
+  color: #9ca3af;
+  border: 1px solid rgba(156, 163, 175, 0.3);
+}
+
+.nc-status-badge.ready {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.nc-status-badge.published {
+  background: rgba(74, 222, 128, 0.2);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+/* ==================== CARD BODY ==================== */
+.nc-card-body {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: expandDown 0.3s ease;
+}
+
+@keyframes expandDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== FIELD ==================== */
+.nc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nc-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(234, 246, 248, 0.9);
+  letter-spacing: 0.3px;
+}
+
+.nc-label .material-symbols-outlined {
+  font-size: 18px;
+  color: #2aa198;
+}
+
+/* ==================== IMAGE UPLOAD ==================== */
+.nc-image-upload {
+  position: relative;
+}
+
+.nc-upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;   
+  gap: 8px;
+  width: 100px;
+  height: 100px;
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin: 0 auto;
+}
+
+.nc-upload-box:hover {
+  border-color: #2aa198;
+  background: rgba(42, 161, 152, 0.1);
+}
+
+.nc-upload-box .material-symbols-outlined {
+  font-size: 32px;
+  color: rgba(234, 246, 248, 0.6);
+}
+
+.nc-upload-box span:last-child {
+  font-size: 12px;
+  color: rgba(234, 246, 248, 0.6);
+}
+
+.nc-image-preview {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid #2aa198;
+  box-shadow: 0 8px 24px rgba(42, 161, 152, 0.3);
+}
+
+.nc-image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nc-image-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 107, 107, 0.9);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.nc-image-remove:hover {
+  background: #ff6b6b;
+  transform: scale(1.1);
+}
+
+/* ==================== INPUT & TEXTAREA ==================== */
+.nc-input,
+.nc-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: #eaf6f8;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.nc-input::placeholder,
+.nc-textarea::placeholder {
+  color: rgba(234, 246, 248, 0.4);
+}
+
+.nc-input:focus,
+.nc-textarea:focus {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: #2aa198;
+  box-shadow: 0 0 0 3px rgba(42, 161, 152, 0.1);
+}
+
+.nc-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.nc-headline-input {
+  resize: none;
+  min-height: auto;
+  height: auto;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  line-height: 1.4;
+}
+
+.nc-char-count {
+  align-self: flex-end;
+  font-size: 11px;
+  color: rgba(234, 246, 248, 0.5);
+}
+
+.nc-hint {
+  font-size: 11px;
+  color: rgba(234, 246, 248, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ==================== ACTION BUTTONS ==================== */
+.nc-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.nc-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  border-radius: 14px;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nc-btn .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.nc-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Start Button */
+.nc-btn-start {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #0a0a0a;
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.35);
+}
+
+.nc-btn-start:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(251, 191, 36, 0.45);
+}
+
+/* Publish Button */
+.nc-btn-publish {
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  color: #0a0a0a;
+  box-shadow: 0 6px 20px rgba(74, 222, 128, 0.35);
+}
+
+.nc-btn-publish:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(74, 222, 128, 0.45);
+}
+
+/* Expire Button */
+.nc-btn-expire {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #0a0a0a;
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.35);
+}
+
+.nc-btn-expire:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(251, 191, 36, 0.45);
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  .notification-center-panel {
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: 20px 20px 0 0;
+    padding: 20px;
+  }
+
+  .nc-title {
+    font-size: 24px;
+  }
+
+  .nc-card {
+    padding: 16px;
+  }
+
+  .nc-actions {
+    flex-direction: column;
+  }
+}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

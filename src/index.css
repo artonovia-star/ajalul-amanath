@@ -1,0 +1,1236 @@
+/* =========================
+   FONTS
+========================= */
+@font-face {
+  font-family: "ZakathNumber";
+  src: url("./assets/fonts/centurygothic.ttf");
+}
+
+@font-face {
+  font-family: "ZakathLabel";
+  src: url("./assets/fonts/centurygothic_bold.ttf");
+}
+
+@font-face {
+  font-family: "ZakathDate";
+  src: url("./assets/fonts/arialroundedmtbold.ttf");
+}
+
+/* =========================
+   RESET
+========================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #0f2e3b;
+  color: #fff;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* =========================
+   APP LAYOUT
+========================= */
+.app {
+  min-height: 100vh;
+  padding: clamp(14px, 4vw, 20px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeUp 1s ease both;
+}
+
+
+
+/* =========================
+   TOP BAR
+========================= */
+.top-bar {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: clamp(10px, 3vw, 14px);
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  padding: clamp(4px, 1.5vw, 6px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  justify-content: center;
+  font-size: 20px;
+  line-height: 1;
+  display: block;
+}
+
+
+/* =========================
+   AYAH
+========================= */
+.ayah {
+  font-family: "El Messiri", serif;
+  text-align: center;
+  font-size: clamp(15px, 4vw, 20px);
+  line-height: 1.8;
+  opacity: 0.85;
+  margin-bottom: clamp(10px, 3vw, 14px);
+  max-width: 90%;
+}
+
+/* =========================
+   LOGO
+========================= */
+.app-logo {
+  width: 80%;
+  max-width: 360px;
+  height: auto;
+  margin-bottom: clamp(40px, 6vw, 50px);
+}
+
+
+/* =========================
+   DAYS CARD
+========================= */
+.days-card {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  border-radius: 28px;
+  overflow: hidden;
+}
+
+.days-svg {
+  width: 100%;
+  display: block;
+}
+
+/* =========================
+   OVERLAY
+========================= */
+.days-overlay {
+  position: absolute;
+  inset: 0;
+  padding: clamp(16px, 5vw, 24px);
+  display: flex;
+  align-items: center;
+}
+
+.days-text {
+  margin-left: clamp(85px, 15vw, 78px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transform: translateY(clamp(-4px, -1vw, -6px));
+}
+
+/* =========================
+   TEXT (RESPONSIVE CORE)
+========================= */
+.days-top {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(3px, 2vw, 7px);
+}
+
+.days-number {
+  font-family: "ZakathLabel", sans-serif;
+  margin-left: clamp(2px, 1vw, 4px);
+  font-size: clamp(36px, 9vw, 44px);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.days-label {
+  font-family: "ZakathNumber", sans-serif;
+  font-size: clamp(15px, 3.5vw, 18px);
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+.days-date {
+  font-family: "ZakathDate", sans-serif;
+  margin-left: clamp(3px, 1vw, 5px);
+  margin-bottom: clamp(4px, 1vw, 6px);
+  font-size: clamp(11px, 3.5vw, 13px);
+  opacity: 0.85;
+}
+
+/* TOGGLE BUTTON */
+.toggle-btn {
+  color: #fff;
+  position: absolute;
+  right: 20px;
+  bottom: 1.7px;              /* closer to SVG bottom */
+  width: 16px;              /* smaller circle */
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+
+.toggle-btn.open {
+  transform: rotate(180deg);
+}
+
+/* DATE SETTINGS PANEL */
+.date-settings {
+  width: 100%;
+  max-width: 360px;
+  margin-top: 12px;
+  padding: 16px;
+  border-radius: 18px;
+  background: #1f4252;
+  color: #fff;
+  animation: fadedown 1s ease both;
+}
+
+.settings-title {
+  font-size: clamp(14px, 4vw, 16px);
+  margin-bottom: 12px;
+  opacity: 0.9;
+}
+
+/* DATE ROW */
+.date-row {
+  display: flex;
+  gap: 8px;
+}
+
+.date-row select {
+  flex: 1;
+  padding: 8px;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+}
+
+/* START BUTTON */
+.start-btn {
+  margin-top: 14px;
+  margin-left: auto;
+  display: block;
+  padding: 8px 18px;
+  border-radius: 14px;
+  border: none;
+  background: #3fa9f5;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.icon-btn1,
+.icon-btn2 {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #ffffff;
+    width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================
+   BOTTOM SHEET (PIN + ADMIN)
+========================= */
+.bottom-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #163845;
+  padding: 18px;
+  border-radius: 18px 18px 0 0;
+  z-index: 999;
+  animation: slideUp 0.25s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.sheet-title {
+  text-align: center;
+  margin-bottom: 14px;
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.pin-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+  border-radius: 12px;
+  border: none;
+  text-align: center;
+  letter-spacing: 6px;
+}
+
+.sheet-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+
+.sheet-actions button,
+.admin-btn {
+  padding: 8px 16px;
+  border-radius: 14px;
+  border: none;
+  background: #3fa9f5;
+  color: #fff;
+  cursor: pointer;
+}
+
+.admin-btn {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.svg-section {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.svg-chat{
+  display: block;
+  width: 47%;
+  height: auto;
+}
+
+.svg-wide {
+  display: flex;
+  width: 98%;
+  height: auto;
+}
+.svg-normal {
+  display: flex;
+  width: 98%;
+  height: auto;
+}
+
+.svg-small {
+  display: block;
+  width: 18%;
+  height: auto;
+}
+
+.svg-wide1 {
+  display: block;
+  width: 76%;
+  height: auto;
+}
+
+.svg-row {
+  display: flex;
+  gap: 12px;
+}
+
+.svg-row1 {
+  display: flex;
+  gap: 12px;
+}
+
+.svg-row2 {
+  display: flex;
+  flex-direction: column;   /* 🔥 THIS is the key */
+  gap: 17px;
+}
+
+
+
+.svg-row3 {
+  display: flex;
+  gap: 12px;
+}
+
+
+/* ================= ZAKATH CALCULATOR ================= */
+
+.calculator-screen {
+  min-height: 100vh;
+  background: #0e2a36;
+  color: #fff;
+  padding: 16px;
+}
+
+.calc-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #3fa9f5;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.calc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.input-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-row label {
+  font-size: 13px;
+  opacity: 0.85;
+  margin-bottom: 4px;
+}
+
+.input-row input {
+  padding: 10px;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+}
+
+.calc-result {
+  margin-top: 20px;
+  padding: 14px;
+  border-radius: 16px;
+  background: #163845;
+}
+
+.calc-result p {
+  margin-bottom: 8px;
+}
+
+.due {
+  color: #4cd964;
+  font-weight: bold;
+}
+
+.not-due {
+  color: #ffcc00;
+}
+
+.amount {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+
+@keyframes fadeUp {
+  from {
+    transform: translateY(4px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadedown {
+  from {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(5px);
+    opacity: 1;
+  }
+}
+
+/* ================= AUDIO MODAL ================= */
+/* Audio permission modal */
+/* =======================
+   NOTIFICATION MODAL
+   ======================= */
+
+.notification-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 25, 32, 0.85),
+    rgba(10, 25, 32, 0.92)
+  );
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.4s ease-out;
+  padding: 20px;
+}
+
+.notification-box {
+  background: linear-gradient(
+    145deg,
+    #1e4b61,
+    #163746
+  );
+  padding: 32px 24px 28px;
+  border-radius: 28px;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  color: #eaf6f1;
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.notification-svg-container {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  padding: 16px;
+}
+
+.notification-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.notification-heading {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 0 0 14px;
+  color: #9fd9c1;
+  letter-spacing: 0.3px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.notification-content {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  opacity: 0.92;
+  margin: 0 0 24px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.notification-ameen-btn {
+  width: 100%;
+  padding: 14px 0;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #2fc28f, #249e73);
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(47, 194, 143, 0.45);
+  transition: all 0.3s ease;
+}
+
+.notification-ameen-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(47, 194, 143, 0.6);
+}
+
+.notification-ameen-btn:active {
+  transform: scale(0.98);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* =======================
+   PREMIUM ADMIN PANEL
+   ======================= */
+
+.admin-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  z-index: 9998;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.admin-panel {
+  width: 100%;
+  max-height: 85vh;
+  background: linear-gradient(180deg, #0f2f3c, #0b2530);
+  border-radius: 28px 28px 0 0;
+  padding: 16px 20px 28px;
+  color: #eaf6f1;
+  animation: slideUpSmooth 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.admin-handle {
+  width: 40px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  margin: 6px auto 18px;
+}
+
+.admin-title {
+  text-align: center;
+  font-size: 1.3rem;
+  margin: 0 0 24px;
+  color: #9fd9c1;
+  font-weight: 600;
+}
+
+.admin-section {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.admin-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.admin-section-title {
+  font-size: 1rem;
+  margin: 0 0 14px;
+  color: #9fd9c1;
+  font-weight: 500;
+}
+
+.admin-subsection-title {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  margin: 16px 0 10px;
+}
+
+.admin-action-btn {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.admin-action-btn.primary {
+  background: linear-gradient(135deg, #3fa9f5, #2d8ac7);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(63, 169, 245, 0.3);
+}
+
+.admin-action-btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(63, 169, 245, 0.4);
+}
+
+.admin-action-btn.secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #eaf6f1;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.admin-action-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.admin-action-btn.accent {
+  background: linear-gradient(135deg, #f59e3f, #e88a2d);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(245, 158, 63, 0.3);
+}
+
+.admin-action-btn.accent:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(245, 158, 63, 0.4);
+}
+
+.admin-action-btn:active {
+  transform: scale(0.98);
+}
+
+.admin-close-btn {
+  width: 100%;
+  padding: 12px 0;
+  border: none;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #d0e6de;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: all 0.25s ease;
+}
+
+.admin-close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  width: 50px;
+  height: 26px;
+  display: inline-block;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 34px;
+  transition: 0.3s;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background: linear-gradient(135deg, #2fc28f, #249e73);
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(24px);
+}
+
+/* =======================
+   NOTIFICATION ADMIN PANEL
+   ======================= */
+
+.notification-admin-panel {
+  width: 100%;
+  max-height: 90vh;
+  background: linear-gradient(180deg, #0f2f3c, #0b2530);
+  border-radius: 28px 28px 0 0;
+  padding: 16px 20px 28px;
+  color: #eaf6f1;
+  animation: slideUpSmooth 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.notification-admin-content {
+  margin-bottom: 16px;
+}
+
+
+
+.upload-label,
+.input-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #9fd9c1;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.upload-btn {
+  width: 100%;
+  padding: 12px;
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #eaf6f1;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.upload-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.svg-preview {
+  margin-top: 12px;
+  width: 80px;
+  height: 80px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.svg-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.notification-input,
+.notification-textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #eaf6f1;
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: all 0.25s ease;
+}
+
+.notification-input:focus,
+.notification-textarea:focus {
+  outline: none;
+  border-color: #3fa9f5;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.notification-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.input-hint {
+  display: block;
+  text-align: right;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  margin-top: 4px;
+}
+
+.publish-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #2fc28f, #249e73);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 6px 16px rgba(47, 194, 143, 0.4);
+  transition: all 0.3s ease;
+  margin-top: 24px;
+}
+
+.publish-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(47, 194, 143, 0.5);
+}
+
+.publish-btn:active {
+  transform: scale(0.98);
+}
+
+@keyframes slideUpSmooth {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+/* ===== INFO OVERLAY ===== */
+.info-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+
+  
+}
+
+
+/* ===== BOTTOM SHEET ===== */
+.info-sheet {
+  width: 100%;
+  height: 75vh;
+  background: linear-gradient(
+    180deg,
+    #0f2f3c,
+    #0b2530
+  );
+  border-radius: 26px 26px 0 0;
+  padding: 16px 20px 28px;
+  color: #eaf6f1;
+  animation: slideUp 0.35s ease-out;
+  overflow-y: auto;
+}
+
+/* drag handle */
+.info-handle {
+  width: 40px;
+  height: 4px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 10px;
+  margin: 6px auto 14px;
+}
+
+/* header */
+.info-header {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.info-header h2 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.version {
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+/* sections */
+.info-section {
+  background: rgba(255,255,255,0.04);
+  border-radius: 18px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.info-section h4 {
+  margin: 0 0 6px;
+  font-size: 0.9rem;
+  color: #9fd9c1;
+}
+
+.info-section p,
+.info-section li {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  opacity: 0.95;
+}
+
+.info-section ul {
+  padding-left: 18px;
+  margin: 6px 0 0;
+}
+
+.info-section.muted {
+  text-align: center;
+  opacity: 0.6;
+  font-size: 0.75rem;
+}
+
+/* close button */
+.info-close-btn {
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px;
+  border: none;
+  border-radius: 16px;
+  background: #2fa37a;
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* animation */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.sheet-subtitle {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.date-row {
+  margin-bottom: 20px;
+}
+
+/* ==================== NOTIFICATION BUTTON (TOP LEFT) ==================== */
+.icon-btn1 {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  backdrop-filter: blur(20px);
+  color: #eaf6f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+}
+
+.icon-btn1::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background: #2ec4b6;
+  border-radius: 50%;
+  animation: notificationPulse 2s ease-in-out infinite;
+}
+
+@keyframes notificationPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+.icon-btn1:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.icon-btn1:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.icon-btn1 .material-symbols-outlined {
+  font-size: 24px;
+}
+
+/* ==================== ADMIN PANEL UPDATES ==================== */
+.admin-email-badge {
+  background: linear-gradient(135deg, rgba(46, 196, 182, 0.2) 0%, rgba(31, 168, 156, 0.15) 100%);
+  border: 1px solid rgba(46, 196, 182, 0.3);
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  color: #2ec4b6;
+  text-align: center;
+  margin: -10px 0 20px 0;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.admin-trigger {
+  cursor: default; /* Changed from pointer since admin access is now controlled */
+  user-select: none;
+}
+
+.settings-hint {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(234, 246, 248, 0.5);
+  margin: 12px 0 0 0;
+  font-style: italic;
+}
+
+.nc-sync-indicator {
+  color: #2ec4b6;
+  font-weight: 600;
+  animation: syncBlink 1.5s ease-in-out infinite;
+}
+
+@keyframes syncBlink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ==================== RESPONSIVE UPDATES ==================== */
+@media (max-width: 768px) {
+  .icon-btn1 {
+    width: 44px;
+    height: 44px;
+  }
+
+  .icon-btn1::before {
+    top: 6px;
+    right: 6px;
+    width: 7px;
+    height: 7px;
+  }
+
+  .admin-email-badge {
+    font-size: 12px;
+    padding: 8px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .icon-btn1 {
+    width: 40px;
+    height: 40px;
+  }
+
+  .icon-btn1 .material-symbols-outlined {
+    font-size: 22px;
+  }
+
+  .icon-btn1::before {
+    top: 5px;
+    right: 5px;
+    width: 6px;
+    height: 6px;
+  }
+}
+
+
+/* ==================== ADMIN-ONLY LONG PRESS INDICATOR ==================== */
+.admin-trigger.admin-active {
+  animation: adminPulse 0.5s ease-in-out;
+}
+
+@keyframes adminPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* ==================== ICON BUTTONS (NOTIFICATION + MUTE) ==================== */
+.icon-btn1,
+.icon-btn2 {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  backdrop-filter: blur(20px);
+  color: #eaf6f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+}
+
+.icon-btn1:hover,
+.icon-btn2:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.icon-btn1:active,
+.icon-btn2:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.icon-btn1 .material-symbols-outlined,
+.icon-btn2 .material-symbols-outlined {
+  font-size: 24px;
+}

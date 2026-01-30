@@ -1,0 +1,51 @@
+.calculator-screen {
+  animation: fadeUp 0.7s ease both;
+}
+
+.animal-select {
+  display: flex;
+  gap: 10px;
+ 
+}
+
+.animal-select button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  background: #1c4657;
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  opacity: 0.6;
+ 
+}
+
+.animal-select button.active {
+  opacity: 1;
+  background: #19e3b1;
+  color: #002b33;
+  font-weight: 600;
+ 
+}
+
+.fiqh-note {
+  font-family: "ZakathHeading", sans-serif;
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 8px;
+
+}
+
+.title {
+   margin-top: 60px;
+
+}
+
+.subtitle {
+  margin-bottom: 60px;
+
+}
+
+
+
