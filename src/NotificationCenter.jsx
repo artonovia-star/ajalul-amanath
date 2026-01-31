@@ -1,7 +1,8 @@
 // NotificationCenter.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { db } from './firebase';
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db, storage } from './firebase';
 import './NotificationCenter.css';
 
 const STORAGE_KEY = 'zakath_notifications';
@@ -20,73 +21,133 @@ export default function NotificationCenter({ onClose }) {
 
   const [activeCard, setActiveCard] = useState(null);
   const [syncing, setSyncing] = useState(false);
+  const isLoadingRef = useRef(false);
+  const saveTimeoutRef = useRef(null);
+  const lastSavedRef = useRef(null);
 
-  // Load notifications from Firebase on mount
+  // Load notifications from Firebase on mount ONCE
   useEffect(() => {
     const loadFromFirebase = async () => {
+      isLoadingRef.current = true;
       try {
         const docRef = doc(db, 'global', 'notifications');
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
           const data = docSnap.data();
-          if (data.list) {
-            // Ensure all notifications have the link and buttonText fields
+          if (data.list && Array.isArray(data.list)) {
             const updatedList = data.list.map(n => ({
-              ...n,
+              id: n.id,
+              png: n.png || '',
+              headline: n.headline || '',
+              content: n.content || '',
               link: n.link || '',
-              buttonText: n.buttonText || 'آمين'
+              buttonText: n.buttonText || 'آمين',
+              status: n.status || 'draft',
+              publishedAt: n.publishedAt || null
             }));
             setNotifications(updatedList);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedList));
+            lastSavedRef.current = JSON.stringify(updatedList);
           }
         }
       } catch (error) {
-        console.error('Error loading notifications from Firebase:', error);
+        console.error('Error loading notifications:', error);
+      } finally {
+        // Small delay to ensure state is settled
+        setTimeout(() => {
+          isLoadingRef.current = false;
+        }, 500);
       }
     };
 
     loadFromFirebase();
-  }, []);
+  }, []); // Only run once on mount
 
-  // Save to both localStorage and Firebase
+  // Save to Firebase with debounce - ONLY if data actually changed
   useEffect(() => {
-    const saveToFirebase = async () => {
-      if (syncing) return;
-      
+    // Skip if loading or syncing
+    if (isLoadingRef.current || syncing) return;
+    
+    // Check if data actually changed
+    const currentData = JSON.stringify(notifications);
+    if (currentData === lastSavedRef.current) return;
+
+    // Clear existing timeout
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
+    // Debounced save
+    saveTimeoutRef.current = setTimeout(async () => {
       setSyncing(true);
       try {
         // Save to localStorage
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(notifications));
+        localStorage.setItem(STORAGE_KEY, currentData);
         
-        // Save to Firebase (global collection)
+        // Save to Firebase
         const docRef = doc(db, 'global', 'notifications');
         await setDoc(docRef, { 
           list: notifications,
           lastUpdated: Date.now()
         });
+        
+        // Update last saved reference
+        lastSavedRef.current = currentData;
+        
+        console.log('✅ Saved to Firebase successfully');
       } catch (error) {
-        console.error('Error saving to Firebase:', error);
+        console.error('❌ Error saving to Firebase:', error);
       } finally {
         setSyncing(false);
       }
+    }, 1500); // 1.5 second debounce
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
     };
+  }, [notifications, syncing]);
 
-    saveToFirebase();
-  }, [notifications]);
-
-  const handleImageUpload = (id, e) => {
+  const handleImageUpload = async (id, e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setNotifications(prev =>
-          prev.map(n =>
-            n.id === id ? { ...n, png: event.target.result } : n
-          )
-        );
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    try {
+      // Show uploading state
+      setNotifications(prev =>
+        prev.map(n =>
+          n.id === id ? { ...n, uploadingImage: true } : n
+        )
+      );
+
+      // Create unique filename with timestamp
+      const timestamp = Date.now();
+      const fileExt = file.name.split('.').pop();
+      const filename = `notification_${id}_${timestamp}.${fileExt}`;
+      
+      // Upload to Firebase Storage
+      const imageRef = storageRef(storage, `notifications/${filename}`);
+      const snapshot = await uploadBytes(imageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      console.log(`✅ Image uploaded for notification ${id}:`, downloadURL);
+
+      // Update state with new image URL
+      setNotifications(prev =>
+        prev.map(n =>
+          n.id === id ? { ...n, png: downloadURL, uploadingImage: false } : n
+        )
+      );
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Failed to upload image. Please try again.');
+      setNotifications(prev =>
+        prev.map(n =>
+          n.id === id ? { ...n, uploadingImage: false } : n
+        )
+      );
     }
   };
 
@@ -101,7 +162,7 @@ export default function NotificationCenter({ onClose }) {
   };
 
   const handleContentChange = (id, value) => {
-    if (value.length <= 500) {  // ✅ Increased from 200 to 500
+    if (value.length <= 500) {
       setNotifications(prev =>
         prev.map(n =>
           n.id === id ? { ...n, content: value } : n
@@ -139,7 +200,7 @@ export default function NotificationCenter({ onClose }) {
         n.id === id ? { ...n, status: 'ready' } : n
       )
     );
-    alert('✓ Notification is ready! Click "Publish" to make it live.');
+    alert('✔ Notification is ready! Click "Publish" to make it live.');
   };
 
   const handlePublish = (id) => {
@@ -150,7 +211,7 @@ export default function NotificationCenter({ onClose }) {
           : n
       )
     );
-    alert('✓ Notification published! All users can now see it.');
+    alert('✔ Notification published! All users can now see it.');
   };
 
   const handleExpire = (id) => {
@@ -160,11 +221,20 @@ export default function NotificationCenter({ onClose }) {
     setNotifications(prev =>
       prev.map(n =>
         n.id === id
-          ? { id: n.id, png: '', headline: '', content: '', link: '', buttonText: 'آمين', status: 'draft', publishedAt: null }
+          ? { 
+              id: n.id, 
+              png: '', 
+              headline: '', 
+              content: '', 
+              link: '', 
+              buttonText: 'آمين', 
+              status: 'draft', 
+              publishedAt: null 
+            }
           : n
       )
     );
-    alert('✓ Notification expired and cleared.');
+    alert('✔ Notification expired and cleared.');
   };
 
   return (
@@ -176,7 +246,7 @@ export default function NotificationCenter({ onClose }) {
             <h2 className="nc-title">Notification Center</h2>
             <p className="nc-subtitle">
               Admin Panel · Manage 5 Notifications
-              {syncing && <span className="nc-sync-indicator"> · Syncing...</span>}
+              {syncing && <span style={{ color: '#fbbf24' }}> · Saving...</span>}
             </p>
           </div>
           <button className="nc-close-btn" onClick={onClose}>
@@ -231,8 +301,17 @@ export default function NotificationCenter({ onClose }) {
                         </div>
                       ) : (
                         <label className="nc-upload-box" onClick={(e) => e.stopPropagation()}>
-                          <span className="material-symbols-outlined">cloud_upload</span>
-                          <span>Click to upload</span>
+                          {notification.uploadingImage ? (
+                            <>
+                              <span className="material-symbols-outlined">hourglass_empty</span>
+                              <span>Uploading...</span>
+                            </>
+                          ) : (
+                            <>
+                              <span className="material-symbols-outlined">cloud_upload</span>
+                              <span>Click to upload</span>
+                            </>
+                          )}
                           <input
                             type="file"
                             accept="image/png,image/jpeg,image/jpg"
@@ -242,6 +321,7 @@ export default function NotificationCenter({ onClose }) {
                             }}
                             onClick={(e) => e.stopPropagation()}
                             style={{ display: 'none' }}
+                            disabled={notification.uploadingImage}
                           />
                         </label>
                       )}
@@ -299,7 +379,7 @@ export default function NotificationCenter({ onClose }) {
                       onClick={(e) => e.stopPropagation()}
                     />
                     <small className="nc-hint">
-                      {notification.link ? '✓ Info button will be shown' : 'ℹ️ No link = no Info button'}
+                      {notification.link ? '✔ Info button will be shown' : 'ℹ️ No link = no Info button'}
                     </small>
                   </div>
 
