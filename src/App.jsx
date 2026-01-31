@@ -325,9 +325,9 @@ useEffect(() => {
       {/* ================= USER NOTIFICATIONS ================= */}
       <UserNotifications onVisibilityChange={setHasVisibleNotifications} />
 
-      {/* ================= MAIN APP CONTENT (BLURRED WHEN NOTIFICATIONS SHOW) ================= */}
-      <div className={`app-content ${hasVisibleNotifications ? 'blurred' : ''}`}>
-        <div className="top-bar">
+      {/* ================= MAIN CONTENT (BLURRED WHEN NOTIFICATIONS VISIBLE) ================= */}
+      <div className={`app-main-content ${hasVisibleNotifications ? 'blurred' : ''}`}>
+      <div className="top-bar">
         <button 
           className="icon-btn1"
           onClick={() => setShowNotificationPanel(true)}
@@ -543,7 +543,7 @@ useEffect(() => {
         </div>
       )}
       </div>
-      {/* End of app-content */}
+      {/* End of app-main-content */}
     </div>
   );
 }

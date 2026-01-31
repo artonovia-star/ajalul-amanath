@@ -89,7 +89,7 @@ export default function UserNotifications({ onVisibilityChange }) {
     return n.publishedAt > dismissedTime;
   });
 
-  // ✅ Notify parent when visibility changes
+  // ✅ Notify parent component when visibility changes
   useEffect(() => {
     if (onVisibilityChange) {
       onVisibilityChange(visibleNotifications.length > 0);
