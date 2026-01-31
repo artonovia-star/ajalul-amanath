@@ -10,6 +10,7 @@ import ReminderScreen from "./ReminderScreen";
 import NotificationCenter from "./NotificationCenter";
 import NotificationPanel from "./NotificationPanel";
 import UserNotifications from "./UserNotifications";
+import './App.css';
 import daysCard from "./assets/svg1.svg";
 import chatSvg from "./assets/svg2.svg";
 import aboutSvg from "./assets/svg3.svg";
@@ -37,6 +38,7 @@ export default function App() {
   const [showReminder, setShowReminder] = useState(false);
   const [showNotificationCenter, setShowNotificationCenter] = useState(false);
   const [showNotificationPanel, setShowNotificationPanel] = useState(false);
+  const [hasVisibleNotifications, setHasVisibleNotifications] = useState(false);
 
   /* ================= AUDIO (BACKGROUND MUSIC) ================= */
   const audioRef = useRef(null);
@@ -322,9 +324,11 @@ useEffect(() => {
   return (
     <div className="app">
       {/* ================= USER NOTIFICATIONS ================= */}
-      <UserNotifications />
+      <UserNotifications onVisibilityChange={setHasVisibleNotifications} />
 
-      <div className="top-bar">
+      {/* ================= MAIN APP CONTENT (BLURRED WHEN NOTIFICATIONS SHOW) ================= */}
+      <div className={`app-content ${hasVisibleNotifications ? 'blurred' : ''}`}>
+        <div className="top-bar">
         <button 
           className="icon-btn1"
           onClick={() => setShowNotificationPanel(true)}
@@ -539,6 +543,8 @@ useEffect(() => {
           </div>
         </div>
       )}
+      </div>
+      {/* End of app-content */}
     </div>
   );
 }

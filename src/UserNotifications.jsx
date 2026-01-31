@@ -4,7 +4,7 @@ import { doc, setDoc, getDoc, onSnapshot } from 'firebase/firestore';
 import { db } from './firebase';
 import './UserNotifications.css';
 
-export default function UserNotifications() {
+export default function UserNotifications({ onVisibilityChange }) {
   const { user } = useAuth();
   const [notifications, setNotifications] = useState([]);
   const [dismissedIds, setDismissedIds] = useState({});
@@ -88,6 +88,13 @@ export default function UserNotifications() {
     // Show again if re-published after user dismissed it
     return n.publishedAt > dismissedTime;
   });
+
+  // ✅ Notify parent when visibility changes
+  useEffect(() => {
+    if (onVisibilityChange) {
+      onVisibilityChange(visibleNotifications.length > 0);
+    }
+  }, [visibleNotifications.length, onVisibilityChange]);
 
   if (visibleNotifications.length === 0) return null;
 
