@@ -10,7 +10,6 @@ import ReminderScreen from "./ReminderScreen";
 import NotificationCenter from "./NotificationCenter";
 import NotificationPanel from "./NotificationPanel";
 import UserNotifications from "./UserNotifications";
-import './App.css';
 import daysCard from "./assets/svg1.svg";
 import chatSvg from "./assets/svg2.svg";
 import aboutSvg from "./assets/svg3.svg";
