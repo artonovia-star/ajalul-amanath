@@ -12,147 +12,541 @@
   font-style: normal;
 }
 
-
+/* =========================
+   MAIN SCREEN - PREMIUM DESIGN
+========================= */
 .zakath-screen {
   min-height: 100vh;
-  background: #0f2e3a;
+  background: linear-gradient(135deg, #0a1e28 0%, #0f2e3b 50%, #102936 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px;
+  padding: clamp(20px, 5vw, 32px) clamp(16px, 4vw, 24px);
   box-sizing: border-box;
-  
+  position: relative;
+  overflow-x: hidden;
 }
 
-/* BACK BUTTON */
+/* Ambient Background Effects */
+.zakath-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(63, 169, 245, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(42, 157, 143, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+  animation: pulseAmbient 8s ease-in-out infinite;
+}
+
+@keyframes pulseAmbient {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* =========================
+   HEADER WITH BACK BUTTON
+========================= */
+.zakath-header {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: clamp(16px, 4vw, 24px);
+  z-index: 10;
+  animation: slideInFromLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .zakath-back {
   font-family: "ZakathHeading", sans-serif;
-  letter-spacing: 0.5px;
-  align-self: flex-start;
-  background: #1c4657;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(42, 157, 143, 0.15), rgba(38, 70, 83, 0.2));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: #fff;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 15px;
+  padding: 11px 20px;
+  border-radius: 14px;
   font-size: 14px;
-  cursor: pointer;
-  animation: fadeUp 0.7s ease both;
-}
-
-/* TITLE */
-.zakath-title {
-  text-align: center;
-  margin-bottom: clamp(65px, 3vw, 69px);
-  margin-top: clamp(60px, 3vw, 79px);
-  animation: fadeUp 0.7s ease both;
-}
-
-.zakath-title h1 {
-  color: white;
-  letter-spacing: 2.px;
-  margin: 0;
-  animation: fadeUp 0.7s ease both;
-}
-
-
-
-/* MAIN BOX */
-.zakath-box {
-  width: 100%;
-  max-width: 420px;
-  background: #0c2630;
-  border-radius: 55px;
-  padding: 16px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  animation: fadeUp 1.2s ease both;
-}
-
-/* BUTTONS */
-.zakath-btn {
-  position: relative;
-  border: none;
-  padding: 0;
-  background: none;
-  cursor: pointer;
-  border-radius: 40px;
-  box-shadow: inset 10px 10px 16px #173342, inset -5px -5px 8px #1c3d4f;
-}
-
-.zakath-btn img {
-  width: 100%;
-  height: auto;
-  border-radius: 40px;
-  display: block;
-  opacity: 30%;
-}
-
-/* TEXT OVER IMAGE */
-.btn-text {
-
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  color: white;
-  font-size: 16px;
   font-weight: 600;
-  text-align: center;
-
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.65);
-  pointer-events: none; /* so click goes to button */
-  font-family: "ZakathHeading", sans-serif;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  letter-spacing: 0.5px;
 }
 
-/* Small phones */
-@media (max-width: 380px) {
-  .btn-text {
-    font-size: 15px;
+.zakath-back:hover {
+  transform: translateX(-4px);
+  background: linear-gradient(135deg, rgba(42, 157, 143, 0.25), rgba(38, 70, 83, 0.3));
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.zakath-back:active {
+  transform: translateX(-2px) scale(0.98);
+}
+
+.zakath-back .material-symbols-outlined {
+  font-size: 20px;
+}
+
+/* =========================
+   TITLE SECTION - PREMIUM
+========================= */
+.zakath-title-section {
+  text-align: center;
+  margin-bottom: clamp(32px, 6vw, 48px);
+  z-index: 10;
+  animation: fadeSlideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s backwards;
+}
+
+.title-icon-wrapper {
+  width: clamp(70px, 16vw, 90px);
+  height: clamp(70px, 16vw, 90px);
+  margin: 0 auto clamp(16px, 4vw, 24px);
+  background: linear-gradient(135deg, rgba(63, 169, 245, 0.2), rgba(42, 157, 143, 0.15));
+  backdrop-filter: blur(20px);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 60px rgba(63, 169, 245, 0.15);
+  animation: floatIcon 3.5s ease-in-out infinite;
+  position: relative;
+}
+
+.title-icon-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 26px;
+  background: linear-gradient(135deg, rgba(63, 169, 245, 0.3), rgba(42, 157, 143, 0.2));
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: -1;
+}
+
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-6px) rotate(2deg); }
+  75% { transform: translateY(-4px) rotate(-2deg); }
+}
+
+.title-icon-wrapper .material-symbols-outlined {
+  font-size: clamp(36px, 9vw, 48px);
+  background: linear-gradient(135deg, #3fa9f5, #2ec4b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 8px rgba(63, 169, 245, 0.4));
+}
+
+.zakath-main-title {
+  font-family: "ZakathBody", sans-serif;
+  color: #fff;
+  font-size: clamp(30px, 7vw, 40px);
+  margin: 0 0 clamp(8px, 2vw, 12px) 0;
+  letter-spacing: 1.5px;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  line-height: 1.2;
+}
+
+.zakath-subtitle {
+  font-family: "ZakathHeading", sans-serif;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: clamp(13px, 3.2vw, 15px);
+  margin: 0;
+  letter-spacing: 0.6px;
+  line-height: 1.5;
+}
+
+/* =========================
+   CALCULATOR GRID - PREMIUM CARDS
+========================= */
+.zakath-calculator-grid {
+  width: 100%;
+  max-width: 600px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(16px, 4vw, 20px);
+  margin-bottom: clamp(24px, 5vw, 32px);
+  z-index: 10;
+}
+
+/* =========================
+   CALCULATOR CARDS - OUTSTANDING DESIGN
+========================= */
+.calculator-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 3.5vw, 18px);
+  background: linear-gradient(135deg, rgba(42, 157, 143, 0.12), rgba(38, 70, 83, 0.18));
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  padding: clamp(18px, 4.5vw, 22px);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  box-shadow: 
+    0 6px 24px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  text-align: left;
+  animation: fadeSlideUp 0.7s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+}
+
+.calculator-card:nth-child(1) { animation-delay: 0.3s; }
+.calculator-card:nth-child(2) { animation-delay: 0.4s; }
+.calculator-card:nth-child(3) { animation-delay: 0.5s; }
+.calculator-card:nth-child(4) { animation-delay: 0.6s; }
+
+/* Shimmer Effect */
+.card-shimmer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  transition: left 0.7s ease;
+}
+
+.calculator-card:hover .card-shimmer {
+  left: 100%;
+}
+
+/* Card Hover Effects */
+.calculator-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(63, 169, 245, 0.12), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: 22px;
+}
+
+.calculator-card:hover::before {
+  opacity: 1;
+}
+
+.calculator-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 
+    0 14px 48px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 0 30px rgba(63, 169, 245, 0.2);
+}
+
+.calculator-card:active {
+  transform: translateY(-3px) scale(0.99);
+}
+
+/* Card Icon Section */
+.card-icon-section {
+  width: clamp(56px, 13vw, 68px);
+  height: clamp(56px, 13vw, 68px);
+  flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(63, 169, 245, 0.18), rgba(42, 157, 143, 0.12));
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 2;
+}
+
+.calculator-card:hover .card-icon-section {
+  transform: scale(1.08) rotate(5deg);
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.card-icon-section .material-symbols-outlined {
+  font-size: clamp(28px, 6.5vw, 34px);
+  color: #3fa9f5;
+  filter: drop-shadow(0 2px 8px rgba(63, 169, 245, 0.4));
+  transition: all 0.3s ease;
+}
+
+.calculator-card:hover .card-icon-section .material-symbols-outlined {
+  filter: drop-shadow(0 4px 12px rgba(63, 169, 245, 0.6));
+}
+
+/* Card Text Section */
+.card-text-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 1vw, 6px);
+  position: relative;
+  z-index: 2;
+}
+
+.card-title {
+  font-family: "ZakathBody", sans-serif;
+  color: #fff;
+  font-size: clamp(15.5px, 3.7vw, 17.5px);
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.6px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  line-height: 1.3;
+  transition: all 0.3s ease;
+}
+
+.calculator-card:hover .card-title {
+  text-shadow: 0 3px 12px rgba(63, 169, 245, 0.4);
+}
+
+.card-description {
+  font-family: "ZakathHeading", sans-serif;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: clamp(12px, 2.9vw, 13.5px);
+  margin: 0;
+  letter-spacing: 0.4px;
+  line-height: 1.4;
+  transition: all 0.3s ease;
+}
+
+.calculator-card:hover .card-description {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Card Arrow Icon */
+.card-arrow-icon {
+  width: clamp(34px, 8vw, 38px);
+  height: clamp(34px, 8vw, 38px);
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 2;
+}
+
+.calculator-card:hover .card-arrow-icon {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(6px) scale(1.05);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.card-arrow-icon .material-symbols-outlined {
+  font-size: clamp(20px, 5vw, 22px);
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+}
+
+.calculator-card:hover .card-arrow-icon .material-symbols-outlined {
+  color: #fff;
+}
+
+/* =========================
+   UNIQUE CARD COLORS & STYLES
+========================= */
+
+/* Silver & Gold Card */
+.silver-gold-card .card-icon-section {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.18), rgba(212, 175, 55, 0.12));
+}
+
+.silver-gold-card .card-icon-section .material-symbols-outlined {
+  color: #f5d142;
+  filter: drop-shadow(0 2px 8px rgba(245, 209, 66, 0.4));
+}
+
+.silver-gold-card:hover {
+  box-shadow: 
+    0 14px 48px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 0 30px rgba(245, 209, 66, 0.2);
+}
+
+/* Money & Trade Card */
+.money-card .card-icon-section {
+  background: linear-gradient(135deg, rgba(46, 213, 115, 0.18), rgba(34, 166, 90, 0.12));
+}
+
+.money-card .card-icon-section .material-symbols-outlined {
+  color: #2ed573;
+  filter: drop-shadow(0 2px 8px rgba(46, 213, 115, 0.4));
+}
+
+.money-card:hover {
+  box-shadow: 
+    0 14px 48px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 0 30px rgba(46, 213, 115, 0.2);
+}
+
+/* Livestock Card */
+.livestock-card .card-icon-section {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.18), rgba(239, 71, 71, 0.12));
+}
+
+.livestock-card .card-icon-section .material-symbols-outlined {
+  color: #ff6b6b;
+  filter: drop-shadow(0 2px 8px rgba(255, 107, 107, 0.4));
+}
+
+.livestock-card:hover {
+  box-shadow: 
+    0 14px 48px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 0 30px rgba(255, 107, 107, 0.2);
+}
+
+/* Crops & Fruits Card */
+.crops-card .card-icon-section {
+  background: linear-gradient(135deg, rgba(123, 237, 159, 0.18), rgba(72, 219, 114, 0.12));
+}
+
+.crops-card .card-icon-section .material-symbols-outlined {
+  color: #7bed9f;
+  filter: drop-shadow(0 2px 8px rgba(123, 237, 159, 0.4));
+}
+
+.crops-card:hover {
+  box-shadow: 
+    0 14px 48px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 0 30px rgba(123, 237, 159, 0.2);
+}
+
+/* =========================
+   INFO FOOTER
+========================= */
+.zakath-info-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: clamp(14px, 3.5vw, 18px) clamp(18px, 4.5vw, 24px);
+  background: linear-gradient(135deg, rgba(42, 157, 143, 0.08), rgba(38, 70, 83, 0.12));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  max-width: 600px;
+  z-index: 10;
+  animation: fadeIn 0.8s ease 0.8s backwards;
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.zakath-info-footer .material-symbols-outlined {
+  font-size: clamp(18px, 4.5vw, 20px);
+  color: rgba(63, 169, 245, 0.8);
+  flex-shrink: 0;
+}
+
+.zakath-info-footer p {
+  font-family: "ZakathHeading", sans-serif;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: clamp(11.5px, 2.8vw, 13px);
+  margin: 0;
+  letter-spacing: 0.4px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.Head1 {
-    font-family: "ZakathBody", sans-serif;
-    
-}
-
-.Head2 {
-    font-family: "ZakathHeading", sans-serif;
-    letter-spacing: 0.7px;
-    font-weight: 100;
-}
-
-.Head3 {
-    font-size: 20px;
-    font-family: "ZakathHeading", sans-serif;
-    letter-spacing: 2px;
-      position: absolute;
-  top: 70%;
-  left: 100%;
-  transform: translate(-50%, -50%);
-
-  color: white;
-  font-size: 20px;
-  font-weight: 600;
-  text-align: center;
-  opacity: 10%;
-    position: relative;
-  border: none;
-  padding: 0;
-  background: none;
-  cursor: pointer;
-
-}
-
-@keyframes fadeUp {
+@keyframes slideInFromLeft {
   from {
-    transform: translateY(15px);
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
     opacity: 0;
   }
   to {
-    transform: translateY(0);
     opacity: 1;
   }
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+@media (max-width: 768px) {
+  .zakath-screen {
+    padding: clamp(16px, 4vw, 24px) clamp(14px, 3.5vw, 20px);
+  }
+}
+
+@media (max-width: 480px) {
+  .calculator-card {
+    gap: clamp(12px, 3vw, 14px);
+    padding: clamp(16px, 4vw, 18px);
+  }
+
+  .card-icon-section {
+    width: clamp(52px, 12vw, 60px);
+    height: clamp(52px, 12vw, 60px);
+  }
+
+  .card-arrow-icon {
+    width: clamp(32px, 7.5vw, 36px);
+    height: clamp(32px, 7.5vw, 36px);
+  }
+}
+
+/* =========================
+   ACCESSIBILITY
+========================= */
+.calculator-card:focus-visible,
+.zakath-back:focus-visible {
+  outline: 2px solid rgba(63, 169, 245, 0.6);
+  outline-offset: 3px;
+}
+
+/* =========================
+   SMOOTH SCROLLING
+========================= */
+.zakath-screen {
+  scroll-behavior: smooth;
 }

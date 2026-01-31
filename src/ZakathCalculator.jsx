@@ -1,18 +1,12 @@
 import { useState } from "react";
 import "./ZakathCalculator.css";
 
-import btnSilverGold from "./assets/buttons/btn-silver-gold.png";
-import btnMoney from "./assets/buttons/btn-money.png";
-import btnLivestock from "./assets/buttons/btn-livestock.png";
-import btnCrops from "./assets/buttons/btn-crops.png";
-
 import SilverGoldCalculator from "./SilverGoldCalculator";
 import MoneyTradeCalculator from "./MoneyTradeCalculator";
 import LivestockCalculator from "./LivestockCalculator";
 import CropsCalculator from "./CropsCalculator";
 
 export default function ZakathCalculator({ onBack }) {
-  // null | silverGold | moneyTrade | livestock | crops
   const [activeCalc, setActiveCalc] = useState(null);
 
   /* ================= SILVER & GOLD ================= */
@@ -38,52 +32,96 @@ export default function ZakathCalculator({ onBack }) {
   /* ================= MAIN MENU ================= */
   return (
     <div className="zakath-screen">
-      <button className="zakath-back" onClick={onBack}>
-        BACK
-      </button>
-
-      <div className="zakath-title">
-        <h1 className="Head1">
-          ZAKATH
-          <p className="Head2">CALCULATOR</p>
-        </h1>
+      {/* Header Section */}
+      <div className="zakath-header">
+        <button className="zakath-back" onClick={onBack}>
+          <span className="material-symbols-outlined">arrow_back</span>
+          <span>Back</span>
+        </button>
       </div>
 
-      <div className="zakath-box">
+      {/* Title Section */}
+      <div className="zakath-title-section">
+        <div className="title-icon-wrapper">
+          <span className="material-symbols-outlined">calculate</span>
+        </div>
+        <h1 className="zakath-main-title">Zakath Calculator</h1>
+        <p className="zakath-subtitle">Choose a category to calculate your Zakath</p>
+      </div>
+
+      {/* Calculator Grid */}
+      <div className="zakath-calculator-grid">
         <button
-          className="zakath-btn"
+          className="calculator-card silver-gold-card"
           onClick={() => setActiveCalc("silverGold")}
         >
-          <img src={btnSilverGold} alt="Silver & Gold" />
-          <span className="btn-text">Silver & Gold</span>
+          <div className="card-shimmer"></div>
+          <div className="card-icon-section">
+            <span className="material-symbols-outlined">diamond</span>
+          </div>
+          <div className="card-text-section">
+            <h3 className="card-title">Silver & Gold</h3>
+            <p className="card-description">Calculate on precious metals</p>
+          </div>
+          <div className="card-arrow-icon">
+            <span className="material-symbols-outlined">arrow_forward</span>
+          </div>
         </button>
 
         <button
-          className="zakath-btn"
+          className="calculator-card money-card"
           onClick={() => setActiveCalc("moneyTrade")}
         >
-          <img src={btnMoney} alt="Trade Goods & Money" />
-          <span className="btn-text">Trade Goods & Money</span>
+          <div className="card-shimmer"></div>
+          <div className="card-icon-section">
+            <span className="material-symbols-outlined">account_balance_wallet</span>
+          </div>
+          <div className="card-text-section">
+            <h3 className="card-title">Trade Goods & Money</h3>
+            <p className="card-description">Calculate on cash & trade items</p>
+          </div>
+          <div className="card-arrow-icon">
+            <span className="material-symbols-outlined">arrow_forward</span>
+          </div>
         </button>
 
         <button
-          className="zakath-btn"
+          className="calculator-card livestock-card"
           onClick={() => setActiveCalc("livestock")}
         >
-          <img src={btnLivestock} alt="Livestock" />
-          <span className="btn-text">Livestock</span>
+          <div className="card-shimmer"></div>
+          <div className="card-icon-section">
+            <span className="material-symbols-outlined">pets</span>
+          </div>
+          <div className="card-text-section">
+            <h3 className="card-title">Livestock</h3>
+            <p className="card-description">Calculate on animals & cattle</p>
+          </div>
+          <div className="card-arrow-icon">
+            <span className="material-symbols-outlined">arrow_forward</span>
+          </div>
         </button>
 
         <button
-          className="zakath-btn"
+          className="calculator-card crops-card"
           onClick={() => setActiveCalc("crops")}
         >
-          <img src={btnCrops} alt="Crops & Fruits" />
-          <span className="btn-text">Crops & Fruits</span>
+          <div className="card-shimmer"></div>
+          <div className="card-icon-section">
+            <span className="material-symbols-outlined">agriculture</span>
+          </div>
+          <div className="card-text-section">
+            <h3 className="card-title">Crops & Fruits</h3>
+            <p className="card-description">Calculate on agricultural produce</p>
+          </div>
+          <div className="card-arrow-icon">
+            <span className="material-symbols-outlined">arrow_forward</span>
+          </div>
         </button>
-
-        <h2 className="Head3">SELECT</h2>
       </div>
+
+      {/* Footer Info */}
+      
     </div>
   );
 }
