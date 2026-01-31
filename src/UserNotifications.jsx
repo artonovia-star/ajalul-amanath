@@ -51,7 +51,7 @@ export default function UserNotifications({ onVisibilityChange }) {
     loadDismissed();
   }, [user]);
 
-  // ✅ Handle آمين button click
+  // ✅ Handle آمين button click - Save dismissed AND save to history
   const handleDismiss = async (notificationId) => {
     const updatedDismissed = {
       ...dismissedIds,
@@ -65,12 +65,57 @@ export default function UserNotifications({ onVisibilityChange }) {
       try {
         const docRef = doc(db, `users/${user.uid}/preferences`, 'dismissed_notifications');
         await setDoc(docRef, { dismissed: updatedDismissed });
+
+        // ✅ SAVE TO HISTORY: Store the full notification in history (last 10)
+        const notification = notifications.find(n => n.id === notificationId);
+        if (notification) {
+          const historyRef = doc(db, `users/${user.uid}/preferences`, 'notification_history');
+          const historySnap = await getDoc(historyRef);
+          
+          let history = [];
+          if (historySnap.exists()) {
+            history = historySnap.data().list || [];
+          }
+
+          // Add notification with dismiss timestamp
+          const historyItem = {
+            ...notification,
+            dismissedAt: Date.now()
+          };
+
+          // Add to beginning and keep only last 10
+          history.unshift(historyItem);
+          history = history.slice(0, 10);
+
+          // Save updated history
+          await setDoc(historyRef, { list: history });
+        }
       } catch (error) {
         console.error('Error saving dismissed notification:', error);
       }
     } else {
       // Save to localStorage for non-logged-in users
       localStorage.setItem('dismissed_notifications', JSON.stringify(updatedDismissed));
+
+      // ✅ SAVE TO HISTORY: Store in localStorage for non-logged-in users
+      const notification = notifications.find(n => n.id === notificationId);
+      if (notification) {
+        let history = [];
+        const savedHistory = localStorage.getItem('notification_history');
+        if (savedHistory) {
+          history = JSON.parse(savedHistory);
+        }
+
+        const historyItem = {
+          ...notification,
+          dismissedAt: Date.now()
+        };
+
+        history.unshift(historyItem);
+        history = history.slice(0, 10);
+
+        localStorage.setItem('notification_history', JSON.stringify(history));
+      }
     }
   };
 

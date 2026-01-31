@@ -8,6 +8,7 @@ export default function NotificationPanel({ onClose }) {
   const { user, signInWithGoogle, signOut } = useAuth();
   const [notifications, setNotifications] = useState([]);
   const [dismissedNotifications, setDismissedNotifications] = useState({});
+  const [notificationHistory, setNotificationHistory] = useState([]);
   const [loading, setLoading] = useState(false);
 
   // ✅ REAL-TIME LISTENER: Load published notifications from Firebase (global)
@@ -55,6 +56,36 @@ export default function NotificationPanel({ onClose }) {
     loadDismissed();
   }, [user]);
 
+  // ✅ Load notification history (last 10 dismissed)
+  useEffect(() => {
+    const loadHistory = async () => {
+      if (user) {
+        // Logged-in user: Load from Firebase with real-time sync
+        try {
+          const historyRef = doc(db, `users/${user.uid}/preferences`, 'notification_history');
+          
+          const unsubscribe = onSnapshot(historyRef, (docSnap) => {
+            if (docSnap.exists()) {
+              setNotificationHistory(docSnap.data().list || []);
+            } else {
+              setNotificationHistory([]);
+            }
+          });
+
+          return unsubscribe;
+        } catch (error) {
+          console.error('Error loading notification history:', error);
+        }
+      } else {
+        // Non-logged-in user: Load from localStorage
+        const saved = localStorage.getItem('notification_history');
+        setNotificationHistory(saved ? JSON.parse(saved) : []);
+      }
+    };
+
+    loadHistory();
+  }, [user]);
+
   const handleSignIn = async () => {
     setLoading(true);
     try {
@@ -74,7 +105,7 @@ export default function NotificationPanel({ onClose }) {
     }
   };
 
-  // ✅ Handle آمين button - Save dismissed notification
+  // ✅ Handle آمين button - Save dismissed notification AND save to history
   const handleDismiss = async (notificationId) => {
     const updatedDismissed = {
       ...dismissedNotifications,
@@ -88,12 +119,57 @@ export default function NotificationPanel({ onClose }) {
       try {
         const docRef = doc(db, `users/${user.uid}/preferences`, 'dismissed_notifications');
         await setDoc(docRef, { dismissed: updatedDismissed });
+
+        // ✅ SAVE TO HISTORY: Store the full notification in history (last 10)
+        const notification = notifications.find(n => n.id === notificationId);
+        if (notification) {
+          const historyRef = doc(db, `users/${user.uid}/preferences`, 'notification_history');
+          const historySnap = await getDoc(historyRef);
+          
+          let history = [];
+          if (historySnap.exists()) {
+            history = historySnap.data().list || [];
+          }
+
+          // Add notification with dismiss timestamp
+          const historyItem = {
+            ...notification,
+            dismissedAt: Date.now()
+          };
+
+          // Add to beginning and keep only last 10
+          history.unshift(historyItem);
+          history = history.slice(0, 10);
+
+          // Save updated history
+          await setDoc(historyRef, { list: history });
+        }
       } catch (error) {
         console.error('Error saving dismissed notification:', error);
       }
     } else {
       // Save to localStorage for non-logged-in users
       localStorage.setItem('dismissed_notifications', JSON.stringify(updatedDismissed));
+
+      // ✅ SAVE TO HISTORY: Store in localStorage for non-logged-in users
+      const notification = notifications.find(n => n.id === notificationId);
+      if (notification) {
+        let history = [];
+        const savedHistory = localStorage.getItem('notification_history');
+        if (savedHistory) {
+          history = JSON.parse(savedHistory);
+        }
+
+        const historyItem = {
+          ...notification,
+          dismissedAt: Date.now()
+        };
+
+        history.unshift(historyItem);
+        history = history.slice(0, 10);
+
+        localStorage.setItem('notification_history', JSON.stringify(history));
+      }
     }
   };
 
@@ -214,6 +290,52 @@ export default function NotificationPanel({ onClose }) {
                             <span className="ameen-text">آمين</span>
                             <span className="ameen-icon">🤲</span>
                           </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* History Section (Last 10 Dismissed) */}
+              {notificationHistory.length > 0 && (
+                <div className="np-section">
+                  <h3 className="np-section-title">History (Last 10)</h3>
+                  {notificationHistory.map((notification) => (
+                    <div key={`history-${notification.id}-${notification.dismissedAt}`} className="np-notification-card np-history">
+                      {notification.png && (
+                        <div className="np-notification-image">
+                          <img src={notification.png} alt={notification.headline} />
+                        </div>
+                      )}
+                      <div className="np-notification-content">
+                        <h3 className="np-notification-headline">{notification.headline}</h3>
+                        <p className="np-notification-text">{notification.content}</p>
+                        
+                        <div className="np-history-footer">
+                          <p className="np-history-date">
+                            Dismissed: {new Date(notification.dismissedAt).toLocaleDateString('en-US', { 
+                              month: 'short', 
+                              day: 'numeric', 
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </p>
+                          
+                          {/* Info Button for history notifications */}
+                          {notification.link && (
+                            <button
+                              className="np-info-btn-history"
+                              onClick={() => handleInfoClick(notification.link)}
+                            >
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 16v-4M12 8h.01"/>
+                              </svg>
+                              <span>Info</span>
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
