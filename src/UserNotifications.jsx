@@ -133,7 +133,7 @@ export default function UserNotifications() {
               className="un-ameen-btn"
               onClick={() => handleDismiss(notification.id)}
             >
-              <span className="ameen-text">آمين</span>
+              <span className="ameen-text">{notification.buttonText || 'آمين'}</span>
               <span className="ameen-icon">🤲</span>
             </button>
           </div>

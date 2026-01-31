@@ -185,7 +185,14 @@ useEffect(() => {
   useEffect(() => {
     if (!nisabHijri) return;
     const passed = daysBetween(nisabHijri, todayHijri);
-    setDaysRemaining(Math.max(0, HIJRI_YEAR_DAYS - passed));
+    
+    if (passed >= HIJRI_YEAR_DAYS) {
+      // More than 1 year has passed - show negative (days passed beyond the year)
+      setDaysRemaining(-(passed - HIJRI_YEAR_DAYS));
+    } else {
+      // Less than 1 year - show days remaining
+      setDaysRemaining(HIJRI_YEAR_DAYS - passed);
+    }
   }, [nisabHijri, todayHijri]);
 
   const startCalculation = async () => {
@@ -348,8 +355,8 @@ useEffect(() => {
               onTouchStart={handlePressStart}
               onTouchEnd={handlePressEnd}
             >
-              <span className="days-number">{daysRemaining}</span>
-              <span className="days-label">Days Left</span>
+              <span className="days-number">{Math.abs(daysRemaining)}</span>
+              <span className="days-label">{daysRemaining < 0 ? 'Days Passed' : 'Days Left'}</span>
             </div>
             <div className="days-date">
               {todayHijri.day} {MONTH_NAMES[todayHijri.month - 1]} {todayHijri.year}

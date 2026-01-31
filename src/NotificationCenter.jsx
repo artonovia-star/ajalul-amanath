@@ -10,11 +10,11 @@ export default function NotificationCenter({ onClose }) {
   const [notifications, setNotifications] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     return saved ? JSON.parse(saved) : [
-      { id: 1, png: '', headline: '', content: '', link: '', status: 'draft', publishedAt: null },
-      { id: 2, png: '', headline: '', content: '', link: '', status: 'draft', publishedAt: null },
-      { id: 3, png: '', headline: '', content: '', link: '', status: 'draft', publishedAt: null },
-      { id: 4, png: '', headline: '', content: '', link: '', status: 'draft', publishedAt: null },
-      { id: 5, png: '', headline: '', content: '', link: '', status: 'draft', publishedAt: null }
+      { id: 1, png: '', headline: '', content: '', link: '', buttonText: 'آمين', status: 'draft', publishedAt: null },
+      { id: 2, png: '', headline: '', content: '', link: '', buttonText: 'آمين', status: 'draft', publishedAt: null },
+      { id: 3, png: '', headline: '', content: '', link: '', buttonText: 'آمين', status: 'draft', publishedAt: null },
+      { id: 4, png: '', headline: '', content: '', link: '', buttonText: 'آمين', status: 'draft', publishedAt: null },
+      { id: 5, png: '', headline: '', content: '', link: '', buttonText: 'آمين', status: 'draft', publishedAt: null }
     ];
   });
 
@@ -31,10 +31,11 @@ export default function NotificationCenter({ onClose }) {
         if (docSnap.exists()) {
           const data = docSnap.data();
           if (data.list) {
-            // Ensure all notifications have the link field
+            // Ensure all notifications have the link and buttonText fields
             const updatedList = data.list.map(n => ({
               ...n,
-              link: n.link || ''
+              link: n.link || '',
+              buttonText: n.buttonText || 'آمين'
             }));
             setNotifications(updatedList);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedList));
@@ -117,6 +118,16 @@ export default function NotificationCenter({ onClose }) {
     );
   };
 
+  const handleButtonTextChange = (id, value) => {
+    if (value.length <= 20) {
+      setNotifications(prev =>
+        prev.map(n =>
+          n.id === id ? { ...n, buttonText: value } : n
+        )
+      );
+    }
+  };
+
   const handleStart = (id) => {
     const notification = notifications.find(n => n.id === id);
     if (!notification.png || !notification.headline || !notification.content) {
@@ -149,7 +160,7 @@ export default function NotificationCenter({ onClose }) {
     setNotifications(prev =>
       prev.map(n =>
         n.id === id
-          ? { id: n.id, png: '', headline: '', content: '', link: '', status: 'draft', publishedAt: null }
+          ? { id: n.id, png: '', headline: '', content: '', link: '', buttonText: 'آمين', status: 'draft', publishedAt: null }
           : n
       )
     );
@@ -290,6 +301,24 @@ export default function NotificationCenter({ onClose }) {
                     <small className="nc-hint">
                       {notification.link ? '✓ Info button will be shown' : 'ℹ️ No link = no Info button'}
                     </small>
+                  </div>
+
+                  {/* Button Text (Customizable) */}
+                  <div className="nc-field">
+                    <label className="nc-label">
+                      <span className="material-symbols-outlined">touch_app</span>
+                      Button Text
+                    </label>
+                    <input
+                      type="text"
+                      className="nc-input"
+                      placeholder="آمين"
+                      value={notification.buttonText}
+                      onChange={(e) => handleButtonTextChange(notification.id, e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      maxLength={20}
+                    />
+                    <small className="nc-char-count">{notification.buttonText.length}/20</small>
                   </div>
 
                   {/* Action Buttons */}
