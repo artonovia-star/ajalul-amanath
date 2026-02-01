@@ -127,51 +127,100 @@ export default function App() {
     loadUserNisab();
   }, [user]);
 
- /* ================= AUTO DAY PASS @ 7:00 PM IST (ADMIN ONLY) ================= */
-useEffect(() => {
-  if (!isAdmin) return;
-
-  const getISTTimestamp = () => {
-    const now = new Date();
-
-    // Convert current time to IST
-    const utc = now.getTime() + now.getTimezoneOffset() * 60000;
-    const ist = new Date(utc + 5.5 * 60 * 60 * 1000);
-
-    // Set cutoff to 7:00 PM IST
-    ist.setHours(19, 0, 0, 0);
-
-    return ist.getTime();
+  /* ================= HELPER FUNCTION: ADVANCE HIJRI DATE WITH AUTO MONTH TRANSITIONS ================= */
+  const advanceHijriByDays = (hijri, days) => {
+    let { day, month, year } = hijri;
+    
+    for (let i = 0; i < days; i++) {
+      day++;
+      
+      // Automatically advance to next month when day exceeds 30
+      if (day > 30) {
+        day = 1;
+        month++;
+        
+        // Automatically advance to next year when month exceeds 12
+        if (month > 12) {
+          month = 1;
+          year++;
+        }
+      }
+    }
+    
+    return { day, month, year };
   };
 
-  const lastUpdated = localStorage.getItem("lastHijriUpdateAt7PM");
-  const today7PM = getISTTimestamp();
+ /* ================= AUTO DAY PASS @ 7:00 PM IST (GLOBAL - ANY USER CAN TRIGGER) ================= */
+useEffect(() => {
+  const getISTTime = () => {
+    const now = new Date();
+    // Convert to IST (UTC + 5:30)
+    const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+    const ist = new Date(utc + 5.5 * 60 * 60 * 1000);
+    return ist;
+  };
 
-  // If first run, just store timestamp
-  if (!lastUpdated) {
-    localStorage.setItem("lastHijriUpdateAt7PM", today7PM);
-    return;
-  }
+  const checkAndUpdateDate = async () => {
+    try {
+      const now = Date.now();
+      const ist = getISTTime();
+      
+      // Get today's 7 PM IST as timestamp
+      const today7PM = new Date(ist);
+      today7PM.setHours(19, 0, 0, 0);
+      const today7PMTimestamp = today7PM.getTime();
 
-  // If current time is past today's 7 PM IST
-  const now = Date.now();
-  if (now >= today7PM && Number(lastUpdated) < today7PM) {
-    const updateDate = async () => {
-      const updated = advanceHijriByDays(todayHijri, 1);
-      setTodayHijri(updated);
-
-      try {
-        const docRef = doc(db, "global", "todayHijri");
-        await setDoc(docRef, updated);
-      } catch (error) {
-        console.error("Error updating Hijri date:", error);
+      // Fetch current date from Firebase
+      const docRef = doc(db, "global", "todayHijri");
+      const docSnap = await getDoc(docRef);
+      
+      if (!docSnap.exists()) {
+        console.log('⚠️ todayHijri document not found in Firebase');
+        return;
       }
-    };
 
-    updateDate();
-    localStorage.setItem("lastHijriUpdateAt7PM", today7PM);
-  }
-}, [isAdmin, todayHijri]);
+      const currentDate = docSnap.data();
+      const lastUpdated = currentDate.lastUpdated || 0;
+
+      // Check if we need to update:
+      // 1. Current time is past today's 7 PM IST
+      // 2. Last update was before today's 7 PM
+      if (now >= today7PMTimestamp && lastUpdated < today7PMTimestamp) {
+        console.log('🕐 Auto-advancing Hijri date at 7 PM IST...');
+        console.log('📅 Current date:', currentDate);
+
+        // Calculate how many days to advance
+        const lastUpdateDate = new Date(lastUpdated);
+        const daysSinceUpdate = Math.floor((now - lastUpdated) / (24 * 60 * 60 * 1000));
+        const daysToAdvance = Math.max(1, daysSinceUpdate);
+
+        console.log(`⏩ Advancing ${daysToAdvance} day(s)...`);
+
+        // Advance the date
+        const updated = advanceHijriByDays(currentDate, daysToAdvance);
+        updated.lastUpdated = now; // Track when last updated
+
+        // Update Firebase (GLOBAL - all users will see this)
+        await setDoc(docRef, updated);
+        
+        console.log('✅ Hijri date updated globally to:', updated);
+        console.log('👥 All users will see this update in real-time!');
+      } else {
+        console.log('✓ Date already updated for today');
+      }
+    } catch (error) {
+      console.error("❌ Error in auto-update:", error);
+    }
+  };
+
+  // Check immediately when app opens
+  checkAndUpdateDate();
+
+  // Keep checking every 5 minutes (in case user keeps app open past 7 PM)
+  const interval = setInterval(checkAndUpdateDate, 5 * 60 * 1000);
+
+  return () => clearInterval(interval);
+}, []); // Empty dependency - runs once on mount
 
 
   /* ================= CALCULATION ================= */
@@ -187,9 +236,12 @@ useEffect(() => {
     if (!nisabHijri) return;
     const passed = daysBetween(nisabHijri, todayHijri);
     
-    if (passed >= HIJRI_YEAR_DAYS) {
-      // More than 1 year has passed - show negative (days passed beyond the year)
+    if (passed > HIJRI_YEAR_DAYS) {
+      // More than 1 year has passed - show days passed beyond the year
       setDaysRemaining(-(passed - HIJRI_YEAR_DAYS));
+    } else if (passed === HIJRI_YEAR_DAYS) {
+      // Exactly 1 year completed - show "0 Days Left" for the completion day
+      setDaysRemaining(0);
     } else {
       // Less than 1 year - show days remaining
       setDaysRemaining(HIJRI_YEAR_DAYS - passed);
@@ -236,22 +288,6 @@ useEffect(() => {
 
   const handlePressEnd = () => {
     clearTimeout(longPressTimer.current);
-  };
-
-  const advanceHijriByDays = (hijri, days) => {
-    let { day, month, year } = hijri;
-    for (let i = 0; i < days; i++) {
-      day++;
-      if (day > 30) {
-        day = 1;
-        month++;
-        if (month > 12) {
-          month = 1;
-          year++;
-        }
-      }
-    }
-    return { day, month, year };
   };
 
   const allowNextDay = async () => {
@@ -359,7 +395,9 @@ useEffect(() => {
               onTouchEnd={handlePressEnd}
             >
               <span className="days-number">{Math.abs(daysRemaining)}</span>
-              <span className="days-label">{daysRemaining < 0 ? 'Days Passed' : 'Days Left'}</span>
+              <span className="days-label">
+                {daysRemaining === 0 ? 'Nisab Completed' : (daysRemaining < 0 ? 'Days Passed' : 'Days Left')}
+              </span>
             </div>
             <div className="days-date">
               {todayHijri.day} {MONTH_NAMES[todayHijri.month - 1]} {todayHijri.year}
@@ -519,6 +557,7 @@ useEffect(() => {
                 <li>✔ Accurate Hijri Zakath tracking</li>
                 <li>✔ Shafi'ee-based Zakath calculator</li>
                 <li>✔ Clear rulings with fiqh discipline</li>
+                <li>✔ Correct Hijri Date (Based on Samastha Updates)</li>
                 <li>✔ Cloud sync with Firebase</li>
                 <li>✔ Real-time notifications</li>
               </ul>
