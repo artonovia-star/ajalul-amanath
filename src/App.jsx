@@ -97,12 +97,9 @@ export default function App() {
   }, []);
 
   /* ================= NISAB (USER-SPECIFIC - FROM FIREBASE) ================= */
-  const [nisabHijri, setNisabHijri] = useState(() => {
-    const saved = localStorage.getItem("nisabHijri");
-    return saved ? JSON.parse(saved) : null;
-  });
-
-  const [daysRemaining, setDaysRemaining] = useState(0);
+  const [nisabHijri, setNisabHijri] = useState(null);
+  const [nisabEnabled, setNisabEnabled] = useState(false);
+  const [daysRemaining, setDaysRemaining] = useState(null);
   const [tempHijri, setTempHijri] = useState({ day: "", month: "", year: "" });
 
   // Load user's nisab date from Firebase
@@ -116,8 +113,10 @@ export default function App() {
         
         if (docSnap.exists()) {
           const data = docSnap.data();
-          setNisabHijri(data);
-          localStorage.setItem(`${user.uid}_nisabHijri`, JSON.stringify(data));
+          setNisabHijri(data.date || data); // Handle both old and new format
+          setNisabEnabled(data.enabled !== undefined ? data.enabled : true);
+          localStorage.setItem(`${user.uid}_nisabHijri`, JSON.stringify(data.date || data));
+          localStorage.setItem(`${user.uid}_nisabEnabled`, JSON.stringify(data.enabled !== undefined ? data.enabled : true));
         }
       } catch (error) {
         console.error('Error loading nisab date:', error);
@@ -233,7 +232,11 @@ useEffect(() => {
   };
 
   useEffect(() => {
-    if (!nisabHijri) return;
+    if (!nisabHijri || !nisabEnabled) {
+      setDaysRemaining(null);
+      return;
+    }
+    
     const passed = daysBetween(nisabHijri, todayHijri);
     
     if (passed > HIJRI_YEAR_DAYS) {
@@ -261,20 +264,49 @@ useEffect(() => {
     };
 
     setNisabHijri(date);
+    setNisabEnabled(true);
     
     // Save to Firebase if user is logged in
     if (user) {
       try {
         const docRef = doc(db, `users/${user.uid}/zakath`, 'nisabDate');
-        await setDoc(docRef, date);
+        await setDoc(docRef, {
+          date: date,
+          enabled: true
+        });
+        console.log('✅ Nisab date saved to Firebase');
       } catch (error) {
-        console.error('Error saving nisab date:', error);
+        console.error('❌ Error saving nisab date:', error);
+        alert('Failed to save. Please check your connection.');
       }
     }
     
     // Also save to localStorage
     localStorage.setItem(user ? `${user.uid}_nisabHijri` : "nisabHijri", JSON.stringify(date));
+    localStorage.setItem(user ? `${user.uid}_nisabEnabled` : "nisabEnabled", JSON.stringify(true));
     setShowSettings(false);
+  };
+
+  const toggleNisabEnabled = async () => {
+    const newEnabled = !nisabEnabled;
+    setNisabEnabled(newEnabled);
+    
+    // Save to Firebase if user is logged in
+    if (user && nisabHijri) {
+      try {
+        const docRef = doc(db, `users/${user.uid}/zakath`, 'nisabDate');
+        await setDoc(docRef, {
+          date: nisabHijri,
+          enabled: newEnabled
+        });
+      } catch (error) {
+        console.error('Error updating nisab enabled status:', error);
+      }
+    }
+    
+    // Save to localStorage
+    const enabledKey = user ? `${user.uid}_nisabEnabled` : "nisabEnabled";
+    localStorage.setItem(enabledKey, JSON.stringify(newEnabled));
   };
 
   /* ================= ADMIN LOGIC ================= */
@@ -292,12 +324,14 @@ useEffect(() => {
 
   const allowNextDay = async () => {
     const updated = advanceHijriByDays(todayHijri, 1);
+    updated.lastUpdated = Date.now(); // ✅ ADD THIS
     setTodayHijri(updated);
     
     // Save to Firebase (global)
     try {
       const docRef = doc(db, "global", "todayHijri");
       await setDoc(docRef, updated);
+      alert('✅ Advanced to next day!');
     } catch (error) {
       console.error('Error updating global Hijri date:', error);
       alert('Failed to update date. Please try again.');
@@ -310,7 +344,8 @@ useEffect(() => {
     const updated = {
       day: 1,
       month: todayHijri.month === 12 ? 1 : todayHijri.month + 1,
-      year: todayHijri.month === 12 ? todayHijri.year + 1 : todayHijri.year
+      year: todayHijri.month === 12 ? todayHijri.year + 1 : todayHijri.year,
+      lastUpdated: Date.now() // ✅ ADD THIS
     };
     
     setTodayHijri(updated);
@@ -319,6 +354,7 @@ useEffect(() => {
     try {
       const docRef = doc(db, "global", "todayHijri");
       await setDoc(docRef, updated);
+      alert('✅ Entered next month!');
     } catch (error) {
       console.error('Error updating global Hijri date:', error);
       alert('Failed to update date. Please try again.');
@@ -334,7 +370,8 @@ useEffect(() => {
     const updated = {
       day: Number(adminSetDate.day),
       month: Number(adminSetDate.month),
-      year: Number(adminSetDate.year)
+      year: Number(adminSetDate.year),
+      lastUpdated: Date.now() // ✅ ADD THIS
     };
 
     setTodayHijri(updated);
@@ -343,12 +380,43 @@ useEffect(() => {
     try {
       const docRef = doc(db, "global", "todayHijri");
       await setDoc(docRef, updated);
-      alert("Today Hijri date updated globally!");
+      alert("✅ Today Hijri date updated globally!");
     } catch (error) {
       console.error('Error updating global Hijri date:', error);
       alert('Failed to update date. Please try again.');
     }
   };
+
+  /* ================= DISPLAY LOGIC ================= */
+  const getDisplayText = () => {
+    if (daysRemaining === null) {
+      return {
+        number: "",
+        label: "Set Nisab Date"
+      };
+    }
+    
+    if (daysRemaining === 0) {
+      return {
+        number: "0",
+        label: "Days Left"
+      };
+    }
+    
+    if (daysRemaining < 0) {
+      return {
+        number: Math.abs(daysRemaining).toString(),
+        label: Math.abs(daysRemaining) === 1 ? "Day Passed" : "Days Passed"
+      };
+    }
+    
+    return {
+      number: daysRemaining.toString(),
+      label: daysRemaining === 1 ? "Day Left" : "Days Left"
+    };
+  };
+
+  const displayText = getDisplayText();
 
   /* ================= SCREEN ROUTING ================= */
   if (screen === "calculator") return <ZakathCalculator onBack={() => setScreen("home")} />;
@@ -394,9 +462,11 @@ useEffect(() => {
               onTouchStart={handlePressStart}
               onTouchEnd={handlePressEnd}
             >
-              <span className="days-number">{Math.abs(daysRemaining)}</span>
-              <span className="days-label">
-                {daysRemaining === 0 ? 'Nisab Completed' : (daysRemaining < 0 ? 'Days Passed' : 'Days Left')}
+              {displayText.number && (
+                <span className="days-number">{displayText.number}</span>
+              )}
+              <span className={`days-label ${!displayText.number ? 'set-nisab-label' : ''}`}>
+                {displayText.label}
               </span>
             </div>
             <div className="days-date">
@@ -415,24 +485,51 @@ useEffect(() => {
 
       {showSettings && (
         <div className="date-settings">
-          <p className="settings-title">Nisab Start Date (Hijri)</p>
+          <div className="settings-header">
+            <p className="settings-title">Nisab Start Date (Hijri)</p>
+            {nisabHijri && (
+              <div className="nisab-toggle">
+                <span className="toggle-label">Nisab Tracking</span>
+                <label className="toggle-switch">
+                  <input
+                    type="checkbox"
+                    checked={nisabEnabled}
+                    onChange={toggleNisabEnabled}
+                  />
+                  <span className="toggle-slider"></span>
+                </label>
+              </div>
+            )}
+          </div>
+          
           <div className="date-row">
-            <select onChange={e => setTempHijri({ ...tempHijri, day: e.target.value })}>
+            <select 
+              value={tempHijri.day}
+              onChange={e => setTempHijri({ ...tempHijri, day: e.target.value })}
+            >
               <option value="">Day</option>
-              {[...Array(30)].map((_, i) => <option key={i}>{i + 1}</option>)}
+              {[...Array(30)].map((_, i) => <option key={i} value={i + 1}>{i + 1}</option>)}
             </select>
-            <select onChange={e => setTempHijri({ ...tempHijri, month: e.target.value })}>
+            <select 
+              value={tempHijri.month}
+              onChange={e => setTempHijri({ ...tempHijri, month: e.target.value })}
+            >
               <option value="">Month</option>
               {MONTH_NAMES.map((m, i) => (
                 <option key={i} value={i + 1}>{m}</option>
               ))}
             </select>
-            <select onChange={e => setTempHijri({ ...tempHijri, year: e.target.value })}>
+            <select 
+              value={tempHijri.year}
+              onChange={e => setTempHijri({ ...tempHijri, year: e.target.value })}
+            >
               <option value="">Year</option>
-              {[...Array(30)].map((_, i) => <option key={i}>{1440 + i}</option>)}
+              {[...Array(30)].map((_, i) => <option key={i} value={1440 + i}>{1440 + i}</option>)}
             </select>
           </div>
-          <button className="start-btn" onClick={startCalculation}>Start</button>
+          <button className="start-btn" onClick={startCalculation}>
+            {nisabHijri ? "Update Date" : "Start"}
+          </button>
           {!user && (
             <p className="settings-hint">Sign in to sync across devices</p>
           )}
@@ -557,7 +654,8 @@ useEffect(() => {
                 <li>✔ Accurate Hijri Zakath tracking</li>
                 <li>✔ Shafi'ee-based Zakath calculator</li>
                 <li>✔ Clear rulings with fiqh discipline</li>
-                <li>✔ Correct Hijri Date (Based on Samastha Updates)</li>
+                <li>✔ Today Hijri Date ( Samastha Updates)</li>
+                <li>✔ Islam Related Notifications</li>
                 <li>✔ Cloud sync with Firebase</li>
                 <li>✔ Real-time notifications</li>
               </ul>

@@ -176,6 +176,13 @@ body {
   white-space: nowrap;
 }
 
+.set-nisab-label {
+  font-size: clamp(13px, 3vw, 15px);
+  opacity: 0.85;
+  cursor: pointer;
+}
+
+
 .days-date {
   font-family: "ZakathDate", sans-serif;
   margin-left: clamp(3px, 1vw, 5px);
@@ -218,11 +225,79 @@ body {
   animation: fadedown 1s ease both;
 }
 
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .settings-title {
   font-size: clamp(14px, 4vw, 16px);
-  margin-bottom: 12px;
   opacity: 0.9;
+  margin: 0;
 }
+
+/* Nisab Toggle */
+.nisab-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggle-label {
+  font-size: 13px;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #47566a;
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: #3fa9f5;
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(20px);
+}
+
 
 /* DATE ROW */
 .date-row {
